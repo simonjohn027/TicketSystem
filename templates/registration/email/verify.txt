@@ -1,0 +1,15 @@
+Hi
+
+Please activate your account for {{ email }} by clicking the link below:
+
+
+
+{{ path }}
+
+
+
+Once you activate, you can login!
+
+Thank you,
+
+Glasgow Caledonian Audio Visual Servic

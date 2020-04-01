@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+        <div class='row'>
+
+    {% for obj in object_list %}
+        <div class='col my-3'>
+       <p>{{ obj.ticket_number }}</p>
+        
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
