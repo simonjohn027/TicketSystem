@@ -11,10 +11,10 @@ class Ticket(models.Model):
     ticket_number = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
-    type = models.CharField(choices=TYPE, max_length=24)
+    status = models.CharField(choices=TYPE, max_length=24)
     priority = models.CharField(choices= PRIORITY,max_length=12)
     creator = models.ForeignKey(User, on_delete= models.DO_NOTHING)
-    Assigned = models.CharField(max_length=344)
+    assigned = models.CharField(max_length=344)
 
     def __str__(self):
         return str(self.ticket_number)
@@ -25,5 +25,6 @@ class Ticket(models.Model):
 class Comments(models.Model):
     ticket = models.ForeignKey(Ticket,on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+    body = models.TextField()
     author = models.ForeignKey(User, on_delete= models.DO_NOTHING)
 

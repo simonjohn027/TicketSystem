@@ -1,7 +1,8 @@
 from django.urls import  path
-from .views import TicketListView
+from .views import index,ticketDetail
 
 app_name = 'ticket'
 urlpatterns = [
-    path('',TicketListView.as_view(),name = 'index' )
+    path('',index,name = 'index' ),
+    path('<int:ticket_id>/',ticketDetail, name='ticketDetail'),
 ]

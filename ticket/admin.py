@@ -6,3 +6,7 @@ from ticket.models import Ticket,Comments
 class TicketAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Ticket, TicketAdmin)
+
+class CommentAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Comments, CommentAdmin)

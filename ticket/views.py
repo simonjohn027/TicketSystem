@@ -1,10 +1,25 @@
-from django.shortcuts import render
+from django.http import Http404
+from django.shortcuts import render,get_object_or_404,get_list_or_404
 from django.views.generic.list import ListView
 
 from ticket.models import Ticket
 
 
-class TicketListView(ListView):
-    model = Ticket
-    template_name = 'ticket/index.html'
+def index(request):
+    ticket = get_list_or_404(Ticket)
+    context = {
+        'ticket_list':ticket
+    }
+    return render(request,'ticket/index.html',context)
 
+    
+def ticketDetail(request, ticket_id):
+    ticket = get_object_or_404(Ticket,pk = ticket_id)
+    comments = ticket.comments_set.all()
+    ticket_list = Ticket.objects.all()
+    context = {
+        "ticket": ticket,
+        "ticket_list":ticket_list,
+         "comment_list":comments
+    }
+    return render(request, 'ticket/index.html',context)
