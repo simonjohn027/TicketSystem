@@ -79,8 +79,12 @@ class UserAdminChangeForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(label='Email')
-    password = forms.CharField(widget=forms.PasswordInput)
+    email = forms.CharField(label="Email", widget=forms.EmailInput(
+        attrs={'class': 'form-control form-control-sm border-left-0', 'id': 'email', 'placeholder': 'Email'}
+    ))
+    password = forms.CharField(label='Password', widget=forms.PasswordInput(
+        attrs={'class': 'form-control form-control-sm border-left-0', 'id': 'password', 'placeholder': 'Password'}))
+
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
@@ -124,13 +128,21 @@ class LoginForm(forms.Form):
 class RegisterForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
-
+    full_name = forms.CharField(label= 'Full Name', widget=forms.TextInput(
+        attrs={'class':'form-control form-control-sm border-left-0','id':'fname','placeholder':'Full Name'}
+    ))
+    email = forms.CharField(label="Email",  widget= forms.EmailInput(
+       attrs={'class':'form-control form-control-sm border-left-0','id':'email','placeholder':'Email'}
+    ))
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(
+        attrs={'class':'form-control form-control-sm border-left-0','id':'password','placeholder':'Password'}
+                                                                             ))
+    password2 = forms.CharField(label='Confirmation Password', widget=forms.PasswordInput(
+        attrs={'class': 'form-control form-control-sm border-left-0', 'id': 'password', 'placeholder': 'Password'}))
 
     class Meta:
         model = User
-        fields = ('full_name','email')
+        fields = ['full_name','email','password1','password2']
 
 
     def clean_password2(self):
@@ -138,14 +150,17 @@ class RegisterForm(forms.ModelForm):
         domain = email.split('@')[1]
         ALLOWED_DOMAIN = ["gmail.com"]
         if domain not in ALLOWED_DOMAIN:
-            msg = "This email is not valid, please use GCU mail"
+            msg = "This email is not valid, please use  gmail"
             raise forms.ValidationError(mark_safe(msg))
 
 
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
+        passwordLen = len(password2)
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Passwords don't match at all")
+        elif passwordLen < 5:
+            raise forms.ValidationError("Password is short, it should be more than 8 character")
         return password2
 
     def save(self, commit=True):

@@ -1,181 +1,89 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
-
-     <main role="main" class="container-fluid">
-      <div class="row">
+<main role="main" class="container-fluid">
+    <div class="row">
         <aside class="col-md-4 blog-sidebar">
-          <div class="p-4 mb-3 bg-light rounded">
-            <h4 class="font-italic">Tickets List</h4>
-          </div>
+            <div class="p-4 mb-3 bg-light rounded">
+                <h4 class="font-italic">Tickets List</h4>
+            </div>
 
-          <div class="list-group">
-              {% for ticket in ticket_list %}
-                  <button
-              type="button"
-              class="list-group-item list-group-item-action"
-            >
-             <a href="{% url 'ticket:ticketDetail' ticket.id %}">{{ ticket.ticket_number }}</a>
-            </button>
+            <div class="list-group">
+                {% for ticket in ticket_list %}
+                <button type="button" class="list-group-item list-group-item-action">
+                    <a href="{% url 'ticket:ticketDetail' ticket.ticket_number %}">{{ ticket.ticket_title }}</a>
+                </button>
 
-    {% endfor %}
+                {% endfor %}
 
-          </div>
+            </div>
         </aside>
         <!-- /.blog-sidebar -->
         <div class="col-md-8 blog-main">
-          <div
-            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
-          >
-            <h1 class="h3">Glasgow Caledonian Audio Visual Service</h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
-              <div class="btn-group mr-2">
-                <button type="button" class="btn btn-sm btn-outline-secondary">
-                  Create Ticket
-                </button>
-              </div>
-            </div>
-          </div>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h3">Glasgow Caledonian Audio Visual Service</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2">
 
-          <div class="card">
-            <div class="card-header">
-              <span class="badge badge-light">NO: {{ ticket.ticket_number }}</span>
-                <span class="badge badge-dark">Date: {{ ticket.date }}</span>
-              <span class="badge badge-pill badge-primary">{{ ticket.priority }}</span>
-              <button
-                type="button"
-                class="btn btn-sm btn-primary float-right"
-                data-toggle="modal"
-                data-target="#editTicket"
-              >
-                {{ticket.type}} <span><i class="far fa-edit"></i></span>
-              </button>
-            </div>
-            <div class="card-body">
-              <h5 class="card-title">Requested By{{ ticket.creator }}</h5>
-              <p class="card-text">
-               {{ticket.description}}
-              </p>
-              <blockquote class="blockquote mb-0">
-                <footer class="blockquote-footer">
-                  Assigned By <cite title="Source Title">{{ticket.Assigned}}</cite>
-                </footer>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-primary float-right"
-                >
-                  <i class="fas fa-comment-medical"></i>
-                </button>
-              </blockquote>
-            </div>
-          </div>
+                        {% if user.is_admin %}
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <a href="{% url 'ticket:admin' %}">Create Ticket</a>
+                        </button>
+                        {% else %}
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <a>Not Authorized to Create Ticket</a>
+                        </button>
+                        {% endif %}
 
-          <div class="card mt-3">
-            <div class="card-body">
-               {% for comment in comment_list %}
-              <div class="pb-3">
-                <h5 class="card-title">Comments</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{comment.author}} <span class="badge badge-dark">Date: {{ ticket.date }}</span></h6>
-
-                <p class="card-text">
-                  {{comment.body}}
-                </p>
-              </div>
-
-              <div class="pd-3">
-                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>
-              </div>
-                {% endfor %}
+                    </div>
+                </div>
             </div>
-          </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="badge badge-light">NO: {{ ticket.ticket_number }}</span>
+                    <span class="badge badge-dark">Date: {{ ticket.date }}</span>
+                    <span class="badge badge-pill badge-primary">{{ ticket.priority }}</span>
+                    <button type="button" class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#editTicket">
+                        {{ ticket.status }} <span><i class="far fa-edit"></i></span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Requested By {{ ticket.creator }}</h5>
+                    <p class="card-text">
+                        {{ ticket.description }}
+                    </p>
+                    <blockquote class="blockquote mb-0">
+                        <footer class="blockquote-footer">
+                            Assigned To: <cite title="Source Title">{{ ticket.assigned }}</cite>
+                        </footer>
+                        <button type="button" class="btn btn-sm btn-primary float-right">
+                            <i class="fas fa-comment-medical"></i>
+                        </button>
+                    </blockquote>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    {% for comment in comment_list %}
+                    <div class="pb-3">
+                        <h5 class="card-title">Comments</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ comment.author }} <span
+                                        class="badge badge-dark">Date: {{ ticket.date }}</span></h6>
+
+                        <p class="card-text">
+                            {{ comment.body }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
         <!-- /.blog-main -->
-      </div>
-      <!-- /.row -->
+    </div>
+    <!-- /.row -->
 
-      <div
-        class="modal fade"
-        id="editTicket"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="editTicketCenterTitle"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="editTicketCenterTitle">
-                ticket Number
-              </h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputEmail4">Requester</label>
-                  <input type="email" class="form-control" id="inputEmail4" />
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="description">Description</label>
-                <textarea
-                  class="form-control"
-                  id="description"
-                  rows="3"
-                ></textarea>
-              </div>
 
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01"
-                        >Status</label
-                      >
-                    </div>
-                    <select class="custom-select" id="inputGroupSelect01">
-                      <option selected>Choose...</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group col-md-6">
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01"
-                        >Priority</label
-                      >
-                    </div>
-                    <select class="custom-select" id="inputGroupSelect01">
-                      <option selected>Choose...</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <button type="submit" class="btn btn-primary btn-sm btn-block">
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
+</main>
 
 {% endblock %}

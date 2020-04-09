@@ -8,12 +8,13 @@ TYPE = (("AVAILABE","AVAILABLE"),("NOT AVAILABLE","NOT AVAILABLE"),("CLOSED","CL
 
 
 class Ticket(models.Model):
-    ticket_number = models.IntegerField()
+    ticket_number = models.AutoField(primary_key = True)
+    ticket_title = models.CharField(max_length= 250, blank= True)
     date = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
     status = models.CharField(choices=TYPE, max_length=24)
     priority = models.CharField(choices= PRIORITY,max_length=12)
-    creator = models.ForeignKey(User, on_delete= models.DO_NOTHING)
+    creator = models.ForeignKey(User, on_delete= models.DO_NOTHING,null=True)
     assigned = models.CharField(max_length=344)
 
     def __str__(self):
@@ -26,5 +27,5 @@ class Comments(models.Model):
     ticket = models.ForeignKey(Ticket,on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     body = models.TextField()
-    author = models.ForeignKey(User, on_delete= models.DO_NOTHING)
+    author = models.ForeignKey(User, on_delete= models.DO_NOTHING,null= True)
 

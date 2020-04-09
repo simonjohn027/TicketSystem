@@ -1,10 +1,66 @@
 {% extends "base.html" %}
-
 {% block content %}
     <h1>Register</h1>
-    <form method='POST'> {% csrf_token %}
-      {{ form }}
-      <button type='submit' class='btn btn-default'>Submit</button>
-    </form>
+    <form class="pt-3" method='POST' action='' enctype='multipart/form-data'>
+        {% csrf_token %}
+         {{ form.non_field_errors }}
+        <div class="form-group">
+            <label>Full Name</label>
+            <div class="input-group">
+                <div class="input-group-prepend bg-transparent">
+                    <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-account-outline text-primary"></i>
+                      </span>
+                </div>
+                {{ form.full_name }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+             {{ form.email.errors }}
+            <div class="input-group">
+                <div class="input-group-prepend bg-transparent">
+                    <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-email-outline text-primary"></i>
+                      </span>
+                </div>
+                {{ form.email }}
+            </div>
+        </div>
 
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Password</label>
+                 {{ form.password1.errors }}
+                <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                        <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-lock-outline text-primary"></i>
+                      </span>
+                    </div>
+                    {{ form.password1}}
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label>Comfirm</label>
+                <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                    <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-lock-outline text-primary"></i></span>
+                    </div>
+                    {{ form.password2}}
+                </div>
+            </div>
+        </div>
+        {% if form.password2.errors %}
+    <ol>
+    {% for error in form.password2.errors %}
+        <li><strong>{{ error|escape }}</strong></li>
+    {% endfor %}
+    </ol>
+{% endif %}
+
+
+        <button type="submit" class="btn btn-primary">Sign in</button>
 {% endblock %}
